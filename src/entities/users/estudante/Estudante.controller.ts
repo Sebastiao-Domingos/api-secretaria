@@ -1,19 +1,18 @@
 import { PrismaClient } from '@prisma/client';
-import { CountyService } from './Municipio.service';
+import { EstudanteService } from './Estudante.service';
 import { Request, Response } from 'express';
-import { CountyCreateData } from './Municipio';
+import { EstudanteCreateData } from './Estudante';
 import { validate } from 'uuid';
 
 const prisma = new PrismaClient();
-const service = new CountyService();
+const service = new EstudanteService();
 
-export class CountyController {
+export class EstudanteController {
   async create(request: Request, response: Response) {
-    const data: CountyCreateData = request.body;
+    const data: EstudanteCreateData = request.body;
 
     try {
       const res = await service.add(data).then((res) => res);
-
       response.status(201).json(res);
     } catch (error) {
       response.status(400).json(error);
@@ -22,13 +21,13 @@ export class CountyController {
 
   async update(request: Request, response: Response) {
     const id: string = request.params.id;
-    const data: Partial<CountyCreateData> = request.body;
+    const data: Partial<EstudanteCreateData> = request.body;
 
     if (!validate(id)) {
       response.status(401).json('Bad request');
     }
 
-    const province = await prisma.municipio
+    const province = await prisma.administrador
       .findUnique({
         where: {
           id,
@@ -75,7 +74,7 @@ export class CountyController {
       response.status(401).json('Invalid ID');
     }
 
-    const province = await prisma.municipio.findUnique({
+    const province = await prisma.estudante.findUnique({
       where: {
         id,
       },

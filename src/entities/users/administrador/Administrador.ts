@@ -1,6 +1,6 @@
-import { Administrador, Endereco, Status } from '@prisma/client';
+import { Administrador, Endereco } from '@prisma/client';
 import { DeleteType } from '../../locality/pais/Pais';
-import { CountyData } from '../professor/Municipio';
+import { CountyData } from '../../locality/municipios/Municipio';
 
 export type EnderecoType = {
   id: string;
@@ -18,7 +18,7 @@ export type AdminCreateData = {
 } & Administrador;
 
 export type AdministradorData = {
-  endereco: Endereco;
+  endereco: Endereco[];
 } & Administrador;
 
 export default interface AdministradorRepository {
