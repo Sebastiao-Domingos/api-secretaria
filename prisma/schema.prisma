@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,111 +8,106 @@ datasource db {
 }
 
 model Pais {
-  id         String      @id @default(uuid()) @db.Uuid()
+  id         String      @id @default(uuid()) @db.Uuid
   nome       String      @unique @db.VarChar(255)
   provincias Provincia[]
 }
 
 model Provincia {
-  id         String      @id @default(uuid()) @db.Uuid()
+  id         String      @id @default(uuid()) @db.Uuid
   nome       String      @unique @db.VarChar(255)
-  pais       Pais        @relation(fields: [id_pais], references: [id])
-  id_pais    String      @db.Uuid()
+  id_pais    String      @db.Uuid
   municipios Municipio[]
+  pais       Pais        @relation(fields: [id_pais], references: [id])
 }
 
 model Municipio {
-  id           String     @id @default(uuid()) @db.Uuid()
+  id           String     @id @default(uuid()) @db.Uuid
   nome         String     @db.VarChar(255)
-  provincia    Provincia  @relation(fields: [id_provincia], references: [id])
-  id_provincia String     @db.Uuid()
+  id_provincia String     @db.Uuid
   enderecos    Endereco[]
-}
-
-enum Status {
-  ativo
-  desativo
+  provincia    Provincia  @relation(fields: [id_provincia], references: [id])
 }
 
 model Administrador {
-  id            String     @id @default(uuid()) @db.Uuid()
+  id            String     @id @default(uuid()) @db.Uuid
   nome          String     @db.VarChar(255)
   email         String     @unique @db.VarChar(255)
-  telemovel     String     @db.VarChar(9)
   numero_bi     String     @db.VarChar(255)
   palavra_passe String
   status        Status
+  telemovel     String     @db.VarChar(9)
   endereco      Endereco[]
 }
 
 model Endereco {
-  id               String         @id @default(uuid()) @db.Uuid()
+  id               String         @id @default(uuid()) @db.Uuid
   distrito         String
   rua              String
-  municipio        Municipio      @relation(fields: [id_municipio], references: [id])
-  id_municipio     String         @db.Uuid()
-  id_administrador String?        @db.Uuid()
+  id_municipio     String         @db.Uuid
+  id_administrador String?        @db.Uuid
+  id_estudante     String?        @db.Uuid
+  id_professor     String?        @db.Uuid
   administrador    Administrador? @relation(fields: [id_administrador], references: [id])
-  id_professor     String?        @db.Uuid()
-  professor        Professor?     @relation(fields: [id_professor], references: [id])
-  id_estudante     String?        @db.Uuid()
   estudante        Estudante?     @relation(fields: [id_estudante], references: [id])
+  municipio        Municipio      @relation(fields: [id_municipio], references: [id])
+  professor        Professor?     @relation(fields: [id_professor], references: [id])
 }
 
 model Curso {
-  id          String       @id @default(uuid()) @db.Uuid()
+  id          String       @id @default(uuid()) @db.Uuid
   nome        String       @unique
   codigo      String       @unique @db.VarChar(12)
   duracao     Int
-  estudantes  Estudante[]
   disciplinas Disciplina[]
+  estudantes  Estudante[]
 }
 
 model Disciplina {
-  id           String      @id @default(uuid()) @db.Uuid()
+  id           String      @id @default(uuid()) @db.Uuid
   nome         String      @unique
   codigo       String      @unique @db.VarChar(12)
+  id_curso     String      @db.Uuid
+  id_professor String?     @db.Uuid
+  curso        Curso       @relation(fields: [id_curso], references: [id])
+  professor    Professor?  @relation(fields: [id_professor], references: [id])
   horarios     Horario[]
   matriculas   Matricula[]
-  id_curso     String      @db.Uuid()
-  curso        Curso       @relation(fields: [id_curso], references: [id])
-  id_professor String?     @db.Uuid()
-  professor    Professor?  @relation(fields: [id_professor], references: [id])
   notas        Nota[]
 }
 
 model Matricula {
-  id             String     @id @default(uuid()) @db.Uuid()
+  id             String     @id @default(uuid()) @db.Uuid
   status         Status
   data_matricula DateTime
-  id_disciplina  String     @db.Uuid()
-  id_estudante   String     @db.Uuid()
+  id_disciplina  String     @db.Uuid
+  id_estudante   String     @db.Uuid
   disciplina     Disciplina @relation(fields: [id_disciplina], references: [id])
   estudante      Estudante  @relation(fields: [id_estudante], references: [id])
 }
 
 model Horario {
-  id            String     @id @default(uuid()) @db.Uuid()
+  id            String     @id @default(uuid()) @db.Uuid
   hora_inicio   String
   hora_final    String
   dia_semana    Int
   sala          Int
-  id_disciplina String     @db.Uuid()
+  id_disciplina String     @db.Uuid
   disciplina    Disciplina @relation(fields: [id_disciplina], references: [id])
 }
 
 model Professor {
-  id          String       @id @default(uuid()) @db.Uuid()
+  id          String       @id @default(uuid()) @db.Uuid
   nome        String       @unique
   email       String       @unique @db.VarChar(255)
   telefone    String       @unique @db.VarChar(9)
   numero_bi   String       @unique @db.VarChar(255)
-  endereco    Endereco[]
   disciplinas Disciplina[]
+  endereco    Endereco[]
 }
 
 model Estudante {
-  id              String      @id @default(uuid()) @db.Uuid()
+  id              String      @id @default(uuid()) @db.Uuid
   num_processo    Int         @default(autoincrement())
   nome            String      @unique
   email           String      @unique @db.VarChar(255)
@@ -126,21 +115,26 @@ model Estudante {
   numero_bi       String      @unique @db.VarChar(255)
   data_nascimento DateTime
   ano_ingresso    Int
+  id_curso        String      @db.Uuid
   endereco        Endereco[]
-  id_curso        String      @db.Uuid()
   curso           Curso       @relation(fields: [id_curso], references: [id])
   matriculas      Matricula[]
   notas           Nota[]
 }
 
 model Nota {
-  id             String     @id @default(uuid()) @db.Uuid()
+  id             String     @id @default(uuid()) @db.Uuid
   nota_parcelar1 Float      @default(0)
   nota_parcelar2 Float      @default(0)
   nota_exame     Float      @default(0)
   situacao       String
-  id_disciplina  String     @db.Uuid()
-  id_estudante   String     @db.Uuid()
+  id_disciplina  String     @db.Uuid
+  id_estudante   String     @db.Uuid
   disciplina     Disciplina @relation(fields: [id_disciplina], references: [id])
   estudante      Estudante  @relation(fields: [id_estudante], references: [id])
+}
+
+enum Status {
+  ativo
+  desativo
 }
