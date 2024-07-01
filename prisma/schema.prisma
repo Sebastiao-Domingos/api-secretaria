@@ -14,11 +14,11 @@ model Pais {
 }
 
 model Provincia {
-  id         String      @id @default(uuid()) @db.Uuid
-  nome       String      @unique @db.VarChar(255)
-  id_pais    String      @db.Uuid
-  municipios Municipio[]
-  pais       Pais        @relation(fields: [id_pais], references: [id])
+  id          String      @id @default(uuid()) @db.Uuid
+  nome        String      @unique @db.VarChar(255)
+  id_pais     String      @db.Uuid
+  pais        Pais        @relation(fields: [id_pais], references: [id])
+  municicpios Municipio[]
 }
 
 model Municipio {

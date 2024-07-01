@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.routes_horario = void 0;
+const express_1 = require("express");
+const Horario_controller_1 = require("./Horario.controller");
+const routes_horario = (0, express_1.Router)();
+exports.routes_horario = routes_horario;
+const controller = new Horario_controller_1.HorarioController();
+const BASE_PATH = '/horarios';
+routes_horario.post(BASE_PATH, controller.create);
+routes_horario.put(`${BASE_PATH}/:id`, controller.update);
+routes_horario.get(BASE_PATH, controller.get);
+routes_horario.get(`${BASE_PATH}/:id`, controller.findOne);
+routes_horario.delete(`${BASE_PATH}/:id`, controller.delete);
