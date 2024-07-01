@@ -8,7 +8,7 @@ export type ProvinceCreateData = {
 
 export type ProvinceData = {
   pais: CountreData;
-  municicpios?: {
+  municipios?: {
     id: string;
     nome: string;
   }[];

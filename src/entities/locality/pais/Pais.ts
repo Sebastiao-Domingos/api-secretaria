@@ -7,7 +7,7 @@ export type CountryData = {
   provincias?: {
     id: string;
     nome: string;
-    municicpios?: {
+    municipios?: {
       id: string;
       nome: string;
     }[];
