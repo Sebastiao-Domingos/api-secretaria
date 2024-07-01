@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.routes_admin = void 0;
+const express_1 = require("express");
+const Administrador_controller_1 = require("./Administrador.controller");
+const routes_admin = (0, express_1.Router)();
+exports.routes_admin = routes_admin;
+const controller = new Administrador_controller_1.AdministradorController();
+const BASE_PATH = '/administradores';
+routes_admin.post(BASE_PATH, controller.create);
+routes_admin.put(`${BASE_PATH}/:id`, controller.update);
+routes_admin.get(BASE_PATH, controller.get);
+routes_admin.get(`${BASE_PATH}/:id`, controller.findOne);
+routes_admin.delete(`${BASE_PATH}/:id`, controller.delete);

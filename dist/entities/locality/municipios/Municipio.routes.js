@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.routes_county = void 0;
+const express_1 = require("express");
+const Municipio_controller_1 = require("./Municipio.controller");
+const routes_county = (0, express_1.Router)();
+exports.routes_county = routes_county;
+const controller = new Municipio_controller_1.CountyController();
+const BASE_PATH = '/municipios';
+routes_county.post(BASE_PATH, controller.create);
+routes_county.put(`${BASE_PATH}/:id`, controller.update);
+routes_county.get(BASE_PATH, controller.get);
+routes_county.get(`${BASE_PATH}/:id`, controller.findOne);
+routes_county.delete(`${BASE_PATH}/:id`, controller.delete);
